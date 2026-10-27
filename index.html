@@ -29,7 +29,7 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#060B13;--surface:#0E1927;--ink:#F3F7FD;--muted:#8DA1BC;--line:rgba(130,170,220,.16);--accent:#3B86FF;--accent-ink:#fff;--warn:#FF7A3D;--ok:#2EDB6B;--bad:#FF4D4F;--tl:20%;--tt:72%;--glass:linear-gradient(135deg,rgba(34,66,96,.62),rgba(15,32,54,.62));--glass-b:rgba(96,165,250,.30);--chip:rgba(22,38,60,.72);--chip-b:rgba(130,170,220,.16);--bgfx:radial-gradient(1000px 520px at 50% -150px,rgba(47,123,255,.30),transparent 70%),radial-gradient(620px 380px at 92% 6%,rgba(30,200,210,.13),transparent 70%);color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#060B13;--surface:#0E1927;--ink:#F3F7FD;--muted:#8DA1BC;--line:rgba(130,170,220,.16);--accent:#3B86FF;--accent-ink:#fff;--warn:#FF7A3D;--ok:#2EDB6B;--bad:#FF4D4F;--tl:20%;--tt:72%;--glass:linear-gradient(135deg,rgba(34,66,96,.62),rgba(15,32,54,.62));--glass-b:rgba(96,165,250,.30);--chip:rgba(22,38,60,.72);--chip-b:rgba(130,170,220,.16);--bgfx:radial-gradient(1000px 520px at 50% -150px,rgba(47,123,255,.30),transparent 70%),radial-gradient(620px 380px at 92% 6%,rgba(30,200,210,.13),transparent 70%);color-scheme:dark}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{background:var(--bg);background-image:var(--bgfx);background-repeat:no-repeat;background-attachment:fixed;color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);background-image:var(--bgfx);background-repeat:no-repeat;background-attachment:fixed;color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 [x-cloak]{display:none!important}
 .field{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:.6rem .75rem;font-size:.95rem;outline:none;transition:border-color .15s,box-shadow .15s}
 .field:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
@@ -72,21 +72,9 @@ button:not([disabled]):active{transform:scale(.95)}
 .pdf-mode .glass { background: #fff !important; border: 1px solid #ddd !important; }
 .pdf-mode .text-muted { color: #555 !important; }
 .glow-text { text-shadow: 0 0 15px color-mix(in srgb, var(--accent) 70%, transparent), 0 0 4px color-mix(in srgb, var(--accent) 50%, transparent); }
-
-/* Estilos para los botones sociales */
-.social-btn {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: 100%; height: 44px; border-radius: 10px;
-  border: 1px solid var(--line); background: var(--surface);
-  font-size: 14px; font-weight: 600; color: var(--ink);
-  transition: all 0.2s ease; cursor: pointer;
-}
-.social-btn:hover { background: var(--bg); border-color: var(--muted); transform: translateY(-1px); }
-.social-btn:active { transform: scale(0.98); }
-.social-icon { width: 20px; height: 20px; }
 </style>
 </head>
-<body x-data="stockly()" x-init="init()" @keydown.window="key($event)" @dragover.window.prevent @drop.window.prevent>
+<body x-data="stockly()" x-init="init()" @keydown.window="key($event)" @dragover.window.prevent @drop.window.prevent class="overflow-x-hidden">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="ill-box" viewBox="0 0 200 140">
 <ellipse cx="100" cy="126" rx="64" ry="8" style="fill:var(--line)"/>
 <path d="M52 64L100 84L148 64V108L100 128L52 108Z" fill="#F2BE7C"/><path d="M52 64L100 84V128L52 108Z" fill="#E6A95B"/>
@@ -97,7 +85,7 @@ button:not([disabled]):active{transform:scale(.95)}
 </symbol></defs></svg>
 
 <!-- PANTALLA DE LOGIN Y REGISTRO -->
-<section x-show="!user && !loading" x-cloak x-transition.opacity.duration.400ms class="fixed inset-0 z-50 bg-bg bgfx overflow-y-auto flex items-center justify-center p-4 py-10">
+<section x-show="!user && !loading" x-cloak x-transition.opacity.duration.400ms class="fixed inset-0 z-50 bg-bg bgfx overflow-y-auto overflow-x-hidden flex items-center justify-center p-4 py-10">
   <div class="dots absolute inset-x-0 top-0 h-96 pointer-events-none" aria-hidden="true"></div>
   <div class="absolute -right-32 -top-32 w-[34rem] h-[34rem] rounded-full pointer-events-none" style="background:radial-gradient(closest-side,color-mix(in srgb,var(--accent) 26%,transparent),transparent)" aria-hidden="true"></div>
   
@@ -136,32 +124,6 @@ button:not([disabled]):active{transform:scale(.95)}
       </button>
     </form>
 
-    <!-- Separador -->
-    <div class="my-6 flex items-center before:flex-1 before:border-t before:border-line after:flex-1 after:border-t after:border-line">
-      <span class="px-3 text-xs text-muted font-medium uppercase tracking-wider">o continúa con</span>
-    </div>
-
-    <!-- Botones Sociales (Estilo League of Legends) -->
-    <div class="space-y-3">
-      <!-- Google -->
-      <button type="button" @click="oauthLogin('google')" class="social-btn">
-        <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-        Sincronizar con Google
-      </button>
-      
-      <!-- Facebook -->
-      <button type="button" @click="oauthLogin('facebook')" class="social-btn">
-        <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="#1877F2"/></svg>
-        Sincronizar con Facebook
-      </button>
-
-      <!-- Instagram (Nota: Usa el login de Facebook por debajo) -->
-      <button type="button" @click="oauthLogin('facebook')" class="social-btn">
-        <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="ig-grad" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z" fill="url(#ig-grad)"/></svg>
-        Sincronizar con Instagram
-      </button>
-    </div>
-
     <div class="mt-6 text-center text-sm">
       <span x-text="authMode === 'login' ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?'" class="text-muted"></span>
       <button type="button" @click="authMode = authMode === 'login' ? 'register' : 'login'; authError = ''" class="text-accent font-semibold ml-1 hover:underline" x-text="authMode === 'login' ? 'Regístrate' : 'Inicia sesión'"></button>
@@ -170,7 +132,7 @@ button:not([disabled]):active{transform:scale(.95)}
 </section>
 
 <!-- CONTENEDOR PRINCIPAL DE LA APP -->
-<div x-show="user" x-cloak>
+<div x-show="user" x-cloak class="overflow-x-hidden">
   <header x-show="biz.done" class="max-w-6xl mx-auto px-5 pt-6 flex flex-wrap items-center gap-2 sm:gap-3">
     <div class="mr-auto flex flex-wrap items-center gap-2 sm:gap-3 min-w-0">
       <img src="https://i.ibb.co/tTYX7phY/Minimalist-geometric-logo-design-20261021094232-removebg-preview.png" alt="Stokio Logo" class="w-10 h-10 sm:w-12 sm:h-12 object-contain">
@@ -185,8 +147,7 @@ button:not([disabled]):active{transform:scale(.95)}
         <!-- Avatar del Header -->
         <span class="relative w-8 h-8 text-xs rounded-full grid place-items-center overflow-hidden shrink-0 bg-accent text-accent-ink font-bold">
           <img x-show="biz.logo" :src="biz.logo" alt="" class="absolute inset-0 w-full h-full object-cover">
-          <img x-show="!biz.logo && user?.user_metadata?.avatar_url" :src="user.user_metadata.avatar_url" alt="" class="absolute inset-0 w-full h-full object-cover">
-          <span x-show="!biz.logo && !user?.user_metadata?.avatar_url" x-text="(biz.name || user?.email || 'M').trim().charAt(0).toUpperCase()"></span>
+          <span x-show="!biz.logo" x-text="(biz.name || user?.email || 'M').trim().charAt(0).toUpperCase()"></span>
         </span>
         
         <span class="truncate" x-text="biz.name||'Mi negocio'"></span>
@@ -198,8 +159,7 @@ button:not([disabled]):active{transform:scale(.95)}
           <!-- Avatar del Menú Desplegable -->
           <span class="relative w-11 h-11 text-base rounded-full grid place-items-center overflow-hidden shrink-0 bg-accent text-accent-ink font-bold">
             <img x-show="biz.logo" :src="biz.logo" alt="" class="absolute inset-0 w-full h-full object-cover">
-            <img x-show="!biz.logo && user?.user_metadata?.avatar_url" :src="user.user_metadata.avatar_url" alt="" class="absolute inset-0 w-full h-full object-cover">
-            <span x-show="!biz.logo && !user?.user_metadata?.avatar_url" x-text="(biz.name || user?.email || 'M').trim().charAt(0).toUpperCase()"></span>
+            <span x-show="!biz.logo" x-text="(biz.name || user?.email || 'M').trim().charAt(0).toUpperCase()"></span>
           </span>
           <div class="min-w-0">
             <p class="font-display font-semibold truncate" x-text="user?.user_metadata?.full_name || biz.name || 'Mi negocio'"></p>
@@ -238,7 +198,7 @@ button:not([disabled]):active{transform:scale(.95)}
     </button>
   </header>
 
-  <main x-show="biz.done" class="relative max-w-6xl mx-auto px-5 pb-28">
+  <main x-show="biz.done" class="relative max-w-6xl mx-auto px-5 pb-28 overflow-x-hidden">
     <div class="dots absolute inset-x-0 top-0 h-80 -z-10 pointer-events-none" aria-hidden="true"></div>
     <section class="pt-10 pb-8 text-center rise">
       <h1 class="font-display font-extrabold text-4xl sm:text-5xl tracking-tight leading-[1.1]">Tu catálogo, a la vista.</h1>
@@ -511,7 +471,7 @@ button:not([disabled]):active{transform:scale(.95)}
   </div>
 
   <!-- Pantalla 1: bienvenida -->
-  <section x-show="!biz.done&&step===0" x-cloak x-transition.opacity.duration.400ms class="fixed inset-0 z-40 bg-bg bgfx overflow-y-auto">
+  <section x-show="!biz.done&&step===0" x-cloak x-transition.opacity.duration.400ms class="fixed inset-0 z-40 bg-bg bgfx overflow-y-auto overflow-x-hidden">
     <div class="dots absolute inset-x-0 top-0 h-96 pointer-events-none" aria-hidden="true"></div>
     <div class="absolute -right-32 -top-32 w-[34rem] h-[34rem] rounded-full pointer-events-none" style="background:radial-gradient(closest-side,color-mix(in srgb,var(--accent) 26%,transparent),transparent)" aria-hidden="true"></div>
     <div class="relative max-w-6xl mx-auto px-6 min-h-full flex flex-col pt-[max(1.5rem,env(safe-area-inset-top,0px))] pb-[max(1.5rem,env(safe-area-inset-bottom,0px))]">
@@ -560,7 +520,7 @@ button:not([disabled]):active{transform:scale(.95)}
   </section>
 
   <!-- Pantalla 2: qué puedes hacer -->
-  <section x-show="!biz.done&&step===1" x-cloak x-transition.opacity.duration.400ms data-scr="1" class="fixed inset-0 z-40 bg-bg bgfx overflow-y-auto">
+  <section x-show="!biz.done&&step===1" x-cloak x-transition.opacity.duration.400ms data-scr="1" class="fixed inset-0 z-40 bg-bg bgfx overflow-y-auto overflow-x-hidden">
     <div class="dots absolute inset-x-0 top-0 h-96 pointer-events-none" aria-hidden="true"></div>
     <div class="relative max-w-6xl mx-auto px-6 min-h-full flex flex-col pt-[max(1.5rem,env(safe-area-inset-top,0px))] pb-[max(1.5rem,env(safe-area-inset-bottom,0px))]">
       <div class="flex items-center justify-between">
@@ -599,7 +559,7 @@ button:not([disabled]):active{transform:scale(.95)}
   </section>
 
   <!-- Pantalla 3: configuración del negocio -->
-  <div x-show="setupOpen" x-cloak x-transition:enter="transition duration-500" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" data-scr="2" class="fixed inset-0 z-40 bg-bg bgfx overflow-y-auto p-4" @keydown.escape.window="biz.done&&setupOpen&&closeSetup()">
+  <div x-show="setupOpen" x-cloak x-transition:enter="transition duration-500" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" data-scr="2" class="fixed inset-0 z-40 bg-bg bgfx overflow-y-auto overflow-x-hidden p-4" @keydown.escape.window="biz.done&&setupOpen&&closeSetup()">
     <div class="dots absolute inset-x-0 top-0 h-80 pointer-events-none" aria-hidden="true"></div>
     <div class="relative mx-auto max-w-2xl my-2 sm:my-10 bg-surface rounded-3xl p-6 sm:p-8 border border-line shadow-xl">
       <div class="gs tile rounded-2xl overflow-hidden mb-6" style="--h:230"><svg viewBox="0 0 640 122" class="w-full h-auto block" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect x="40" y="30" width="34" height="30" rx="6" fill="#fff"/><rect x="84" y="20" width="48" height="40" rx="6" fill="#C9A7FF"/><rect x="142" y="34" width="30" height="26" rx="6" fill="#F5A524"/><rect x="182" y="16" width="50" height="44" rx="6" fill="#7C93FF"/><rect x="242" y="26" width="30" height="34" rx="6" fill="#9FE3C1"/><rect x="282" y="32" width="44" height="28" rx="6" fill="#FFB38A"/><rect x="336" y="20" width="36" height="40" rx="6" fill="#7C93FF"/><rect x="382" y="28" width="48" height="32" rx="6" fill="#fff"/><rect x="440" y="18" width="30" height="42" rx="6" fill="#9FE3C1"/><rect x="480" y="30" width="52" height="30" rx="6" fill="#F5A524"/><rect x="542" y="22" width="34" height="38" rx="6" fill="#C9A7FF"/><rect x="586" y="32" width="30" height="28" rx="6" fill="#FFB38A"/><rect x="0" y="60" width="640" height="5" fill="#fff" opacity=".75"/><rect x="24" y="72" width="46" height="40" rx="6" fill="#7C93FF"/><rect x="78" y="84" width="30" height="28" rx="6" fill="#FFB38A"/><rect x="114" y="64" width="52" height="48" rx="6" fill="#9FE3C1"/><rect x="176" y="78" width="26" height="34" rx="6" fill="#F5A524"/><rect x="210" y="82" width="44" height="30" rx="6" fill="#C9A7FF"/><rect x="262" y="68" width="34" height="44" rx="6" fill="#fff"/><rect x="304" y="76" width="48" height="36" rx="6" fill="#7C93FF"/><rect x="360" y="82" width="30" height="30" rx="6" fill="#FFB38A"/><rect x="396" y="66" width="50" height="46" rx="6" fill="#9FE3C1"/><rect x="454" y="74" width="28" height="38" rx="6" fill="#F5A524"/><rect x="490" y="80" width="46" height="32" rx="6" fill="#C9A7FF"/><rect x="544" y="70" width="36" height="42" rx="6" fill="#fff"/><rect x="588" y="82" width="34" height="30" rx="6" fill="#7C93FF"/><rect x="0" y="112" width="640" height="6" fill="#fff" opacity=".75"/></svg></div>
@@ -838,14 +798,14 @@ button:not([disabled]):active{transform:scale(.95)}
 </div> <!-- Cierre del contenedor x-show="user" -->
 
 <script>
-// Inicializar Supabase (URL CORREGIDA)
+// Inicializar Supabase
 const sbUrl = 'https://ywwygdizcytsxcwmoqkb.supabase.co';
 const sbKey = 'sb_publishable_ZzJ3Fs263mDOIdfc3OOceg_tyDrMXjs';
 const sb = window.supabase.createClient(sbUrl, sbKey);
 
 function stockly(){
   const KEY='stockly:v1';
-  // Datos de prueba (puedes vaciarlos si quieres que empiece limpio)
+  // Datos de prueba
   const seed=[
     {id:1,name:'Café de origen 250 g',sku:'PR-001',cat:'Despensa',price:14.5,stock:24,img:'',tags:['Nuevo']},
     {id:2,name:'Aceite de oliva virgen',sku:'PR-002',cat:'Despensa',price:18.9,stock:3,img:'',tags:['Oferta']},
@@ -1019,21 +979,6 @@ function stockly(){
         this.authError = 'No se pudo conectar con Supabase. Revisa la consola (F12) para más detalles.';
       } finally {
         this.authLoading = false;
-      }
-    },
-
-    async oauthLogin(provider) {
-      try {
-        const { error } = await sb.auth.signInWithOAuth({
-          provider: provider,
-          options: {
-            redirectTo: window.location.origin
-          }
-        });
-        if (error) throw error;
-      } catch (error) {
-        console.error(`Error al iniciar sesión con ${provider}:`, error);
-        this.authError = `No se pudo conectar con ${provider}. Asegúrate de tenerlo configurado en Supabase.`;
       }
     },
 
